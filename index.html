@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVCyber College Recommendation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e7f3ff;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎓 SVCyber College Recommendation</h1>
+
+  <form id="studentForm">
+    <label for="name">Student Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="course">Course Interested:</label>
+    <select id="course">
+      <option value="B.Tech">B.Tech</option>
+      <option value="BBA">BBA</option>
+      <option value="B.Com">B.Com</option>
+    </select>
+
+    <label for="marks">12th Percentage:</label>
+    <input type="number" id="marks" required>
+
+    <label for="location">Preferred Location:</label>
+    <input type="text" id="location">
+
+    <label for="quota">Quota / Category:</label>
+    <input type="text" id="quota">
+
+    <button type="submit">Get Recommendations</button>
+  </form>
+
+  <div class="results" id="results" style="display:none;">
+    <h3>Recommended Colleges:</h3>
+    <div id="recommendations"></div>
+  </div>
+
+  <script>
+    const colleges = [
+      {
+        name: "MIT Pune",
+        course: "B.Tech",
+        location: "Pune",
+        minMarks: 75,
+        quota: "All",
+        deadline: "15 Sept 2025",
+        hostel: "Yes",
+        email: "admission@mit.edu.in"
+      },
+      {
+        name: "DY Patil Mumbai",
+        course: "BBA",
+        location: "Mumbai",
+        minMarks: 60,
+        quota: "All",
+        deadline: "25 Sept 2025",
+        hostel: "Yes",
+        email: "bba@dypatil.edu.in"
+      },
+      {
+        name: "BM College",
+        course: "B.Com",
+        location: "Pune",
+        minMarks: 50,
+        quota: "OBC",
+        deadline: "10 Sept 2025",
+        hostel: "No",
+        email: "bmcollege@gmail.com"
+      }
+    ];
+
+    document.getElementById("studentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const course = document.getElementById("course").value;
+      const marks = parseInt(document.getElementById("marks").value);
+      const location = document.getElementById("location").value.toLowerCase();
+      const quota = document.getElementById("quota").value.toLowerCase();
+
+      const matched = colleges.filter(college => {
+        return (
+          college.course === course &&
+          marks >= college.minMarks &&
+          (college.quota.toLowerCase() === "all" || college.quota.toLowerCase() === quota) &&
+          (location === "" || college.location.toLowerCase().includes(location))
+        );
+      });
+
+      const recommendations = document.getElementById("recommendations");
+      recommendations.innerHTML = "";
+
+      if (matched.length === 0) {
+        recommendations.innerHTML = "<p>No matching colleges found based on your criteria.</p>";
+      } else {
+        matched.forEach(college => {
+          recommendations.innerHTML += `
+            <div style="margin-bottom:15px;">
+              <strong>${college.name}</strong><br>
+              📍 Location: ${college.location}<br>
+              🧪 Course: ${college.course}<br>
+              📊 Min Marks: ${college.minMarks}%<br>
+              🏠 Hostel: ${college.hostel}<br>
+              🗓️ Deadline: ${college.deadline}<br>
+              📧 Contact: ${college.email}
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById("results").style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
